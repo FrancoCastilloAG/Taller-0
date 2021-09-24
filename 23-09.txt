@@ -1,0 +1,275 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Taller0 {
+	static int cantidadClientes=0;
+	static int cantidadPeliculas=0;
+	public static void main(String[]args) throws NumberFormatException, IOException {
+		int [][] sala = new int[10][30];
+		Archive Clients
+		String[] nombre = new String[999];
+		String[] apellido = new String[999];
+		String[] rut = new String[999];
+		String[] password = new String[999];
+		int[] saldo = new int[999];
+		Archive Status
+		String[] rutStatus = new String[999];
+		String[] status = new String[999];
+		Archive Movies
+		String[] nombrePelicula = new String[999];
+		String[] tipo = new String[999];
+		int[] recaudacion = new int[999];
+		String[] funciones = new String[999];
+		crear_matriz(sala);
+		carga_C(nombre,apellido,rut,password,saldo);
+		carga_S(rutStatus,status);
+		carga_P(nombrePelicula,tipo,recaudacion,funciones);
+		iniciar_sesion(rut,password,nombre,apellido,saldo,nombrePelicula,recaudacion);
+	}
+	
+	public static void crear_matriz(int[][]matriz) {
+		for(int f=0;f10;f++) {
+			for(int c=0;c30;c++) {
+				matriz[f][c]=1;
+			}
+		}
+		for(int f=0;f4;f++) {
+			for(int c=0;c5;c++) {
+				matriz[f][c]=0;
+			}
+		}
+		for(int f=0;f4;f++) {
+			for(int c=25;c30;c++) {
+				matriz[f][c]=0;
+			}
+		}
+	}
+	
+	public static void print_matriz(int[][]matriz) {
+		for(int f=0;f10;f++) {
+			for(int c=0;c30;c++) {
+				System.out.print(matriz[f][c]);
+			}
+		System.out.println(  Fila +(f+1));
+		}
+	}
+
+	public static void carga_C(String[] nombre,String[] apellido,String[] rut,String[] password,int[] saldo) throws NumberFormatException, IOException {
+		File archivo = new File (srcClientes.txt); 
+		FileReader text = new FileReader (archivo);
+		BufferedReader reader = new BufferedReader(text); 
+		String linea;
+		String[] partes;
+		int contador=0;
+		while((linea = reader.readLine())!=null){
+			int contador2=0;
+			partes = linea.split(,);
+			nombre[contador]=partes[0];
+			apellido[contador]=partes[1];
+			rut[contador]=partes[2];
+			password[contador]=partes[3];
+			saldo[contador]=Integer.parseInt(partes[4]);
+			contador++;
+		}
+		reader.close();
+		cantidadClientes=contador;
+	}
+	
+	public static void carga_S(String[] rutStatus,String[] status) throws NumberFormatException, IOException {
+		File archivo = new File (srcStatus.txt); 
+		FileReader text = new FileReader (archivo);
+		BufferedReader reader = new BufferedReader(text); 
+		String linea;
+		String[] partes;
+		int contador=0;
+		while((linea = reader.readLine())!=null){
+			partes = linea.split(,);
+			rutStatus[contador]=partes[0];
+			status[contador]=partes[1];
+			contador++;
+		}
+		reader.close();
+	}
+	
+	public static void carga_P(String[] nombrePelicula,String[] tipo,int[] recaudacion,String[] funciones) throws NumberFormatException, IOException {
+		File archivo = new File (srcPeliculas.txt); 
+		FileReader text = new FileReader (archivo);
+		BufferedReader reader = new BufferedReader(text); 
+		String linea;
+		String[] partes;
+		int contador=0;
+		while((linea = reader.readLine())!=null){
+			partes = linea.split(,,4);
+			nombrePelicula[contador]=partes[0];
+			tipo[contador]=partes[1];
+			recaudacion[contador]=Integer.parseInt(partes[2]);
+			funciones[contador]=partes[3];
+			
+			for(int i=3;ipartes.length;i+=2) {
+				Funciones[contador]=partes[i];
+				Funciones[contador]=partes[i+1];
+			}
+			
+			contador++;
+		}
+		cantidadPeliculas=contador;
+		reader.close();
+	}
+	
+	public static void print_lista(String[] lista) {
+		for(int f=0;f2;f++) {
+			System.out.println(lista[f]);
+		}
+	}
+	
+	public static void iniciar_sesion(String[] rut,String[] password,String[] nombre,String[] apellido,int[] saldo,String[] nombrePelicula,int[] recaudacion) {
+		boolean llave = true;
+		while(llave) {
+			System.out.println(INICIAR SESION);
+			System.out.println(Escriba su Rut);
+			System.out.println(Para finalizar el programa introduzca 0);
+			Scanner sc = new Scanner(System.in);
+			String RUT = sc.nextLine();
+			String recepcion=comprobar_rut(RUT);
+			int posicion=clasificar_rut(recepcion,rut);
+			if((RUT).equals(0)) {
+				llave=false;
+				System.out.println(Se a finalizado la operacion);
+			}
+			else if (posicion==-1) {
+				System.out.println(Escriba su contraseña);
+				String contraseña = sc.nextLine();
+				if((contraseña).equals(ADMIN)) {
+					menu_admin(nombrePelicula,recaudacion);
+				}
+				else{
+					System.out.println(ERROR-Contraseña invalida);
+				}
+			}
+			else if (posicion=0) {
+				System.out.println(Escriba su contraseña);
+				String contraseña = sc.nextLine();
+				if((contraseña).equals(password[posicion])) {
+					menu_usuario(posicion);
+				}
+				else{
+					System.out.println(ERROR-Contraseña invalida);
+				}
+			}
+			else{
+				System.out.println(Usuario no existe);
+				System.out.println(Desea crar un nuevo Usuario);
+				System.out.println(YN);
+				String clave = sc.nextLine();
+				if((clave).equals(y)(clave).equals(Y)) {
+					nuevo_usuario(RUT,nombre,apellido,rut,password,saldo);
+					print_lista(nombre);
+				}
+				else if((clave).equals(n)(clave).equals(N)) {
+					 NO SE HACE NADA
+				}
+				else{
+					System.out.println(ERROR COMANDO NO RECONOCIDO);
+				}
+				System.out.println(Volviendo al principio de la operacion);
+			}
+
+		}
+		
+	}
+	
+	public static String comprobar_rut(String rut) {
+		String[] partes;
+		partes = rut.split();
+		if(partes.length==12) {
+			if(partes[11].equals(k)) {
+				partes[11]=K;
+			}
+			return partes[0]+partes[1]+partes[3]+partes[4]+partes[5]+partes[7]+partes[8]+partes[9]+partes[11];
+		}
+		else if(partes.length==10) {
+			if(partes[9].equals(k)) {
+				partes[9]=K;
+			}
+			return partes[0]+partes[1]+partes[2]+partes[3]+partes[4]+partes[5]+partes[6]+partes[7]+partes[9];
+		}
+		else if(partes.length==9) {
+			if(partes[8].equals(k)) {
+				partes[8]=K;
+			}
+			return partes[0]+partes[1]+partes[2]+partes[3]+partes[4]+partes[5]+partes[6]+partes[7]+partes[8];
+		}
+		else{
+			return rut;
+		}
+	}
+	
+	public static int clasificar_rut(String rutComprobar,String[] rut) {
+		String clave;
+		if(rutComprobar.equals(ADMIN)) {
+			return -1;
+		}
+		for(int i=0;icantidadClientes;i++) {
+			clave = comprobar_rut(rut[i]);
+			if(clave.equals(rutComprobar)) {
+				return i;
+			}
+		}
+		return -2;
+	}
+
+	private static void nuevo_usuario(String RUT,String[] Nombre,String[] Apellido,String[] Rut,String[] Password,int[] Saldo){
+		Scanner sc = new Scanner(System.in);
+		System.out.println(Porfavor indique su nombre);
+		String nombre = sc.nextLine();
+		System.out.println(Porfavor indique su apellido);
+		String apellido = sc.nextLine();
+		System.out.println(Porfavor indique su contraseña);
+		String password = sc.nextLine();
+		Nombre[cantidadClientes+1]=nombre;
+		Apellido[cantidadClientes+1]=apellido;
+		Rut[cantidadClientes+1]=RUT;
+		Password[cantidadClientes+1]=password;
+		Saldo[cantidadClientes+1]=0;
+		cantidadClientes++;
+	}
+	
+	private static void menu_admin(String[] nombrePelicula,int[] recaudacion) {
+			boolean llave =true;
+			while(llave) {
+				System.out.println(MENU ADMIN );
+				System.out.println(1)Taquilla);
+				System.out.println(2)Informacion Cliente);
+				System.out.println(3)Salir);
+				Scanner sc = new Scanner(System.in);
+				String seleccion = sc.nextLine();
+				if((seleccion).equals(1)) {
+					taquilla(nombrePelicula,recaudacion);
+				}
+				else if((seleccion).equals(2)) {
+				}
+				else if((seleccion).equals(3)) {
+					llave=false;
+					System.out.println(Saliendo);
+				}
+				else {
+					System.out.println(ERROR-NO SE RECONOCE EL COMMANDO);
+				}
+			}
+	}
+	
+	private static void taquilla(String[] nombrePelicula,int[] recaudacion) {
+		for(int f=0;fcantidadPeliculas;f++) {
+			System.out.println(Pelicula +nombrePelicula[f]+recaudacion total +recaudacion[f]);
+		}
+	}
+	
+	private static void informacion_cliente() {
+		
+	}
+
+
+}
